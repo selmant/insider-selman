@@ -73,6 +73,34 @@ paths:
       summary: Get messages by sent status
       tags:
       - messages
+  /messages/job-state:
+    post:
+      consumes:
+      - application/json
+      description: Start or stop the message sender job
+      parameters:
+      - description: State to change to
+        enum:
+        - start
+        - stop
+        in: query
+        name: state
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+      summary: Change the state of the message sender job
+      tags:
+      - job
   /messages/queue:
     post:
       consumes:
