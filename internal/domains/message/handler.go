@@ -106,5 +106,5 @@ func (h *Handler) ChangeMessageSenderState(c echo.Context) error {
 func (h *Handler) RegisterRoutes(e *echo.Echo) {
 	e.POST("/messages/queue", h.QueueMessage)
 	e.GET("/messages", h.GetMessages)
-	e.POST("messages/job-state", h.ChangeMessageSenderState)
+	e.POST("/messages/job-state", h.ChangeMessageSenderState)
 }
