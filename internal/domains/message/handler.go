@@ -2,18 +2,17 @@ package message
 
 import (
 	"encoding/json"
+	"errors"
 	"github.com/labstack/echo/v4"
 	"insider/internal/models"
 	"insider/internal/utils"
 	"net/http"
 )
 
-// Handler struct
 type Handler struct {
 	service Service
 }
 
-// NewHandler creates a new Handler
 func NewHandler(service Service) *Handler {
 	return &Handler{service: service}
 }
@@ -76,7 +75,36 @@ func (h *Handler) GetMessages(c echo.Context) error {
 	return c.JSON(http.StatusOK, utils.APIResponseWithData[[]models.Message]{Data: messages})
 }
 
-// RegisterRoutes registers the HTTP routes
+// ChangeMessageSenderState godoc
+// @Summary Change the state of the message sender job
+// @Description Start or stop the message sender job
+// @Tags job
+// @Accept json
+// @Produce json
+// @Param state query string true "State to change to" Enums(start, stop)
+// @Success 200 {object} utils.APIResponse
+// @Failure 400 {object} utils.APIResponse
+// @Router /messages/job-state [post]
+func (h *Handler) ChangeMessageSenderState(c echo.Context) error {
+	var err error
+
+	running := c.QueryParam("state")
+	if running == "start" {
+		err = h.service.StartMessageSenderJob(c.Request().Context())
+	} else if running == "stop" {
+		err = h.service.StopMessageSenderJob(c.Request().Context())
+	} else {
+		err = errors.New("invalid state")
+	}
+
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, utils.APIResponse{Message: err.Error()})
+	}
+	return nil
+}
+
 func (h *Handler) RegisterRoutes(e *echo.Echo) {
 	e.POST("/messages/queue", h.QueueMessage)
+	e.GET("/messages", h.GetMessages)
+	e.POST("messages/job-state", h.ChangeMessageSenderState)
 }
