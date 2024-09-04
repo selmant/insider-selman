@@ -1,0 +1,155 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/messages": {
+            "get": {
+                "description": "Get messages by sent status",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "messages"
+                ],
+                "summary": "Get messages by sent status",
+                "parameters": [
+                    {
+                        "enum": [
+                            "pending",
+                            "sent",
+                            "failed"
+                        ],
+                        "type": "string",
+                        "description": "Sent status",
+                        "name": "status",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/message.GetMessagesResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/message.GetMessagesResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/messages/queue": {
+            "post": {
+                "description": "Queue a message for sending",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "messages"
+                ],
+                "summary": "Queue a message for sending",
+                "parameters": [
+                    {
+                        "description": "Message to be queued",
+                        "name": "message",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Message"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.APIResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.APIResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "message.GetMessagesResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Message"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Message": {
+            "type": "object",
+            "required": [
+                "content",
+                "recipient_phone",
+                "sent_status"
+            ],
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "recipient_phone": {
+                    "type": "string"
+                },
+                "sent_at": {
+                    "type": "string"
+                },
+                "sent_status": {
+                    "$ref": "#/definitions/models.SentStatus"
+                }
+            }
+        },
+        "models.SentStatus": {
+            "type": "string",
+            "enum": [
+                "pending",
+                "sent",
+                "failed"
+            ],
+            "x-enum-varnames": [
+                "SentStatusPending",
+                "SentStatusSent",
+                "SentStatusFailed"
+            ]
+        },
+        "utils.APIResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

@@ -7,7 +7,7 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 1234
-      MYSQL_DATABASE: insider
+      MYSQL_DATABASE: message
       MYSQL_USER: selmant
       MYSQL_PASSWORD: 1234
     ports:

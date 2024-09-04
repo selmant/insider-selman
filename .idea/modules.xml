@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/insider.iml" filepath="$PROJECT_DIR$/.idea/insider.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/insider_message.iml" filepath="$PROJECT_DIR$/.idea/insider_message.iml" />
     </modules>
   </component>
 </project>

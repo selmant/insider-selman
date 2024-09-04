@@ -1,0 +1,102 @@
+definitions:
+  message.GetMessagesResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.Message'
+        type: array
+      message:
+        type: string
+    type: object
+  models.Message:
+    properties:
+      content:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      recipient_phone:
+        type: string
+      sent_at:
+        type: string
+      sent_status:
+        $ref: '#/definitions/models.SentStatus'
+    required:
+    - content
+    - recipient_phone
+    - sent_status
+    type: object
+  models.SentStatus:
+    enum:
+    - pending
+    - sent
+    - failed
+    type: string
+    x-enum-varnames:
+    - SentStatusPending
+    - SentStatusSent
+    - SentStatusFailed
+  utils.APIResponse:
+    properties:
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /messages:
+    get:
+      consumes:
+      - application/json
+      description: Get messages by sent status
+      parameters:
+      - description: Sent status
+        enum:
+        - pending
+        - sent
+        - failed
+        in: query
+        name: status
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/message.GetMessagesResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/message.GetMessagesResponse'
+      summary: Get messages by sent status
+      tags:
+      - messages
+  /messages/queue:
+    post:
+      consumes:
+      - application/json
+      description: Queue a message for sending
+      parameters:
+      - description: Message to be queued
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/models.Message'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.APIResponse'
+      summary: Queue a message for sending
+      tags:
+      - messages
+swagger: "2.0"
