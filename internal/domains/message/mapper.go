@@ -13,6 +13,11 @@ type UpdateMessageFields struct {
 	RemoteID       *string            `json:"remote_id" db:"remote_id"`
 }
 
+type CreateMessageForm struct {
+	Content        string `json:"content" validate:"required"`
+	RecipientPhone string `json:"recipient_phone" validate:"required,e164"`
+}
+
 type GetMessagesResponse struct {
 	Message string           `json:"message"`
 	Data    []models.Message `json:"data,omitempty"`

@@ -41,6 +41,7 @@ func (mp *MessagePublisherImpl) Publish(ctx context.Context, message *models.Mes
 	if err != nil {
 		return response, err
 	}
+	req.Header.Add("Content-Type", "application/json")
 
 	resp, err := mp.client.Do(req.WithContext(ctx))
 	if err != nil {

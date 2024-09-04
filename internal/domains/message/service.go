@@ -104,12 +104,13 @@ func (s *ServiceImpl) StartMessageSenderJob(_ context.Context) error {
 		ticker := time.NewTicker(2 * time.Minute)
 		defer ticker.Stop()
 		for {
+			err := s.SendQueuedNMessages(ctx, 2)
+			if err != nil {
+				log.Error(err)
+			}
 			select {
 			case <-ticker.C:
-				err := s.SendQueuedNMessages(ctx, 2)
-				if err != nil {
-					log.Error(err)
-				}
+				continue
 			case <-ctx.Done():
 				return
 			}

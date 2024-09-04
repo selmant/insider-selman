@@ -1,6 +1,6 @@
 module insider
 
-go 1.23.0
+go 1.23
 
 require (
 	github.com/go-sql-driver/mysql v1.8.1
@@ -9,6 +9,7 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/labstack/echo/v4 v4.12.0
 	github.com/sirupsen/logrus v1.9.3
+	github.com/swaggo/echo-swagger v1.4.1
 	github.com/swaggo/swag v1.16.3
 )
 
@@ -26,7 +27,6 @@ require (
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
-	github.com/swaggo/echo-swagger v1.4.1 // indirect
 	github.com/swaggo/files/v2 v2.0.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect

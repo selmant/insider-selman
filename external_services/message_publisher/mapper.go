@@ -5,7 +5,7 @@ import "github.com/google/uuid"
 type ResponseMessage string
 
 const (
-	Accepted ResponseMessage = "accepted"
+	Accepted ResponseMessage = "Accepted"
 )
 
 type Message struct {

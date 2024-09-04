@@ -114,12 +114,12 @@ const docTemplate = `{
                 "summary": "Queue a message for sending",
                 "parameters": [
                     {
-                        "description": "Message to be queued",
+                        "description": "Create form to be queued",
                         "name": "message",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Message"
+                            "$ref": "#/definitions/message.CreateMessageForm"
                         }
                     }
                 ],
@@ -141,6 +141,21 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "message.CreateMessageForm": {
+            "type": "object",
+            "required": [
+                "content",
+                "recipient_phone"
+            ],
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "recipient_phone": {
+                    "type": "string"
+                }
+            }
+        },
         "message.GetMessagesResponse": {
             "type": "object",
             "properties": {
@@ -173,6 +188,9 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "recipient_phone": {
+                    "type": "string"
+                },
+                "remote_id": {
                     "type": "string"
                 },
                 "sent_at": {

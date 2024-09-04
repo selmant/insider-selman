@@ -23,12 +23,12 @@ func NewHandler(service Service) *Handler {
 // @Tags messages
 // @Accept json
 // @Produce json
-// @Param message body models.Message true "Message to be queued"
+// @Param message body CreateMessageForm true "Create form to be queued"
 // @Success 200 {object} utils.APIResponse
 // @Failure 400 {object} utils.APIResponse
 // @Router /messages/queue [post]
 func (h *Handler) QueueMessage(c echo.Context) error {
-	var message models.Message
+	var message CreateMessageForm
 	if err := json.NewDecoder(c.Request().Body).Decode(&message); err != nil {
 		return c.JSON(http.StatusBadRequest, utils.APIResponse{Message: err.Error()})
 	}
@@ -59,7 +59,7 @@ func (h *Handler) GetMessages(c echo.Context) error {
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, utils.APIResponse{Message: err.Error()})
 		}
-		return c.JSON(http.StatusOK, utils.APIResponseWithData[[]models.Message]{Data: messages})
+		return c.JSON(http.StatusOK, utils.APIResponseWithData[[]models.Message]{Data: messages, Message: "Messages fetched successfully"})
 	}
 
 	status, err := models.SentStatusFromString(statusString)
@@ -72,7 +72,7 @@ func (h *Handler) GetMessages(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, utils.APIResponse{Message: err.Error()})
 	}
 
-	return c.JSON(http.StatusOK, utils.APIResponseWithData[[]models.Message]{Data: messages})
+	return c.JSON(http.StatusOK, utils.APIResponseWithData[[]models.Message]{Data: messages, Message: "Messages fetched successfully"})
 }
 
 // ChangeMessageSenderState godoc

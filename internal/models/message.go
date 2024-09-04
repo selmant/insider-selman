@@ -13,6 +13,7 @@ type Message struct {
 	RecipientPhone string     `json:"recipient_phone" validate:"required,e164" db:"recipient_phone"`
 	SentStatus     SentStatus `json:"sent_status" validate:"required" db:"sent_status"`
 	SentAt         *time.Time `json:"sent_at" db:"sent_at"`
+	RemoteID       *string    `json:"remote_id" db:"remote_id"`
 	CreatedAt      *time.Time `json:"created_at" db:"created_at"`
 }
 

@@ -1,4 +1,14 @@
 definitions:
+  message.CreateMessageForm:
+    properties:
+      content:
+        type: string
+      recipient_phone:
+        type: string
+    required:
+    - content
+    - recipient_phone
+    type: object
   message.GetMessagesResponse:
     properties:
       data:
@@ -17,6 +27,8 @@ definitions:
       id:
         type: integer
       recipient_phone:
+        type: string
+      remote_id:
         type: string
       sent_at:
         type: string
@@ -107,12 +119,12 @@ paths:
       - application/json
       description: Queue a message for sending
       parameters:
-      - description: Message to be queued
+      - description: Create form to be queued
         in: body
         name: message
         required: true
         schema:
-          $ref: '#/definitions/models.Message'
+          $ref: '#/definitions/message.CreateMessageForm'
       produces:
       - application/json
       responses:
