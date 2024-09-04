@@ -7,7 +7,7 @@ import (
 	"insider/external_services/message_publisher"
 	"insider/internal/models"
 	"insider/internal/utils"
-	"sync/atomic"
+	"sync"
 	"time"
 )
 
@@ -23,8 +23,9 @@ type ServiceImpl struct {
 	repository       Repository
 	messagePublisher message_publisher.MessagePublisher
 
-	runnerState   atomic.Bool
+	runnerState   bool
 	jobCancelFunc context.CancelFunc
+	mutex         sync.Mutex
 }
 
 func NewService(repository Repository,
@@ -88,10 +89,14 @@ func (s *ServiceImpl) FindAllMessages(ctx context.Context) ([]models.Message, er
 }
 
 func (s *ServiceImpl) StartMessageSenderJob(_ context.Context) error {
-	if s.runnerState.Load() {
+	s.mutex.Lock()
+	defer s.mutex.Unlock()
+
+	if s.runnerState {
 		return errors.New("job is already running")
 	}
-	s.runnerState.Store(true)
+	s.runnerState = true
+
 	ctx, cancel := context.WithCancel(context.Background())
 	s.jobCancelFunc = cancel
 
@@ -115,10 +120,14 @@ func (s *ServiceImpl) StartMessageSenderJob(_ context.Context) error {
 }
 
 func (s *ServiceImpl) StopMessageSenderJob(_ context.Context) error {
-	if !s.runnerState.Load() {
+	s.mutex.Lock()
+	defer s.mutex.Unlock()
+
+	if !s.runnerState {
 		return errors.New("job is not running")
 	}
-	s.runnerState.Store(false)
+	s.runnerState = false
+
 	if s.jobCancelFunc != nil {
 		s.jobCancelFunc()
 	}
